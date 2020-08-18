@@ -1,0 +1,14 @@
+{
+    "include": [
+        "lib/**/*.js",
+        "bin/**/*.js"
+    ],
+    "exclude": [
+        "**/docs/**/*",
+        "**/examples/**/*"
+    ],
+    "reporter": [
+        "text",
+        "text-summary"
+    ]
+}
