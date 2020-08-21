@@ -1,8 +1,19 @@
 <html>
     <head>
-        <title>Test page</title>
+        <title>Hashagna Test page</title>
+        <script src="/lib/hashagna.min.js"></script>
     </head>
     <body>
-        <h1>Test</h1>
+        <h1>Hashagna Test</h1>
+        <input id="code" type="text">
+        <button id="btn-post" onclick="test('post')">Test POST</button>
+        <button id="btn-get" onclick="test('get')">Test GET</button>
+        <input id="result" type="text" disabled>
+        <script>
+            function test(method) {
+                Hashagna.HashagnaHttpClient[method]('/api/auto-redirect', { code: document.getElementById('code').value })
+                    .then(({ hashParams }) => document.getElementById('result').value = hashParams.result);
+            }
+        </script>
     </body>
 </html>

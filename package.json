@@ -2,9 +2,18 @@
   "name": "@marketto/hashagna",
   "version": "1.0.0",
   "description": "Library to handle iFrame GET/POST requests to catch provided Hash in redirected Url",
-  "main": "index.js",
+  "main": "dist/hashagna.min.js",
+  "module": "dist/hashagna.mjs",
+  "typings": "src/index.ts",
   "scripts": {
-    "test": "mocha"
+    "release": "npm audit fix & npm run lint-fix && npm run test && npm run coverage && npm run docs && npm run build",
+    "build": "del ./dist & rollup -c",
+    "lint": "tslint -c tslint.json \"src/**/*.ts\"",
+    "lint-fix": "tslint -c tslint.json \"src/**/*.ts\" --fix",
+    "test": "mocha",
+    "manual-test": "node ./test/manual-test.js",
+    "coverage": "del ./coverage \n mkdir ./coverage \n nyc mocha && nyc report --reporter=text-lcov | relcov > ./coverage/lcov.info",
+    "docs": "del ./docs & jsdoc . -c jsdoc.json"
   },
   "keywords": [
     "Hash",
@@ -12,20 +21,25 @@
     "Security",
     "Authentication",
     "Token",
-    "es6"
+    "TypeScript"
   ],
   "author": "Marco Ricupero <marco.ricupero@gmail.com>",
   "license": "MIT",
   "devDependencies": {
+    "@wessberg/rollup-plugin-ts": "^1.3.2",
     "chai": "^4.2.0",
-    "eslint": "^7.7.0",
+    "del-cli": "^3.0.1",
     "express": "^4.17.1",
     "foodoc": "0.0.9",
     "jsdoc": "^3.6.5",
     "mocha": "^8.1.1",
-    "mockettaro": "^2.0.0",
     "nyc": "^15.1.0",
     "playwright": "^1.3.0",
-    "relcov": "^1.0.6"
+    "relcov": "^1.0.6",
+    "rollup": "^2.26.4",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-license": "^2.2.0",
+    "tslint": "^6.1.3",
+    "typescript": "^4.0.2"
   }
 }

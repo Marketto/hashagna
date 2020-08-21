@@ -1,4 +1,5 @@
-const { playwright,  expect, express, path } = require('./common');
+const { playwright,  expect } = require('./commons/common');
+const redirectSimulator = require('./commons/302-simulator');
 
 const SERVER_PORT = 3753;
 const TARGET_URL = `http://localhost:${SERVER_PORT}/index.html`;
@@ -9,11 +10,7 @@ describe('Test 1', () => {
         beforePromise = await Promise.all([
             playwright.chromium.launch({ headless: false })
                 .then(browser => browser.newContext().then(context => ({ browser, context }))),
-            new Promise(resolve => {
-                const server = express();
-                server.use('/', express.static(path.join(__dirname, 'assets')));
-                const testServer = server.listen(SERVER_PORT, () => resolve(testServer));
-            })
+            new Promise(resolve => redirectSimulator(SERVER_PORT, resolve))
         ]).then(([pw, server]) => ({
             ...pw,
             server
@@ -27,9 +24,11 @@ describe('Test 1', () => {
     });
 
 
-    it('Should Daje!', async () => {
-        expect(await (await page.$('title')).innerText()).to.eq('Test page');
-        expect(await (await page.$('h1')).innerText()).to.eq('Test');
+    it('Should retrieve sent code', async () => {
+        const code = 'dfs768sdf';
+        await page.fill('#code', code);
+        await page.click('#btn-get');
+        expect(await page.$eval('#result', input => input.value)).to.eq(code);
     });
 
 
