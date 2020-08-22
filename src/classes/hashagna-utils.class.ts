@@ -11,23 +11,7 @@ export default class HashagnaUtils {
         return await this.isDomElementReady(() => document.getElementById(id) as HTMLIFrameElement)
     }
 
-/*
-    private static async getIframe(id: string): Promise<HTMLIFrameElement> {
-        const iFrame = document.getElementById(id) as HTMLIFrameElement;
-        if (!iFrame) {
-            return await new Promise(resolve => window.requestAnimationFrame(() => this.getIframe(id).then(resolve)));
-        }
-        return iFrame;
-    }
-
-    private static async iframeLoadedContentWindow(iFrame: HTMLIFrameElement): Promise<Window> {
-        if (!iFrame.contentWindow) {
-            return await new Promise(resolve => window.requestAnimationFrame(() => this.iframeLoadedContentWindow(iFrame).then(resolve)));
-        }
-        return iFrame.contentWindow;
-    }
-*/
-    private static async isDomElementReady<T extends HTMLElement | Window | Document>(getter: () => T | null): Promise<T> {
+    public static async isDomElementReady<T extends HTMLElement | Window | Document>(getter: () => T | null): Promise<T> {
         const target = getter();
         if (!target) {
             return await new Promise(resolve => window.requestAnimationFrame(() => this.isDomElementReady(getter).then(resolve)));

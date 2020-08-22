@@ -1,28 +1,30 @@
-const { express, path } = require('./common');
+const { express, path, cryptoMd5 } = require('./common');
 const bodyParser = require('body-parser');
 
+const assetsPath = path.join(__dirname, '../assets');
+const DELAY = 300;
 module.exports = (serverPort, callBack) => {
     const server = express();
-    server.use('/', express.static(path.join(__dirname, '../assets')));
+    server.use('/', express.static(assetsPath));
     server.use('/lib', express.static(path.join(__dirname, '../../dist')));
     server.get('/api/redirection', (req, res) => res.sendStatus(200));
     server.get('/api/auto-redirect', (req, res) => {
         setTimeout(() => {
             if (req.query.code) {
-                res.redirect(302, `/redirection.html#result=${req.query.code}`);
+                res.redirect(302, `/redirection.html#result=${cryptoMd5(req.query.code)}`);
             } else {
-                res.sendStatus(400);
+                res.status(400).sendFile(path.join(assetsPath, 'error.html'));
             }
-        }, 600);
+        }, DELAY);
     });
     server.post('/api/auto-redirect',  bodyParser.urlencoded({ extended: true }), (req, res) => {
         setTimeout(() => {
             if (req.body.code) {
-                res.redirect(302, `/redirection.html#result=${req.body.code}`);
+                res.redirect(302, `/redirection.html#result=${cryptoMd5(req.body.code)}`);
             } else {
-                res.sendStatus(400);
+                res.status(400).sendFile(path.join(assetsPath, 'error.html'));
             }
-        }, 600);
+        }, DELAY);
     });
     const testServer = server.listen(serverPort, callBack ? () => callBack(testServer) : undefined);
     return testServer;
