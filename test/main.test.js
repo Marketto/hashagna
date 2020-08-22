@@ -23,14 +23,41 @@ describe('Test 1', () => {
         await page.goto(TARGET_URL);
     });
 
-
-    it('Should retrieve sent code', async () => {
+    describe('GET', async () => {
         const code = 'dfs768sdf';
-        await page.fill('#code', code);
-        await page.click('#btn-get');
-        expect(await page.$eval('#result', input => input.value)).to.eq(code);
+        it('Should retrieve sent code', async () => {
+            await page.fill('#code', code);
+            await page.click('#btn-get');
+            expect(await page.$eval('#result', input => input.value)).to.eq(code);
+        });
+        it('Should delete iframe', async () => {
+            await page.fill('#code', code);
+            await page.click('#btn-get');
+            expect((await page.$$('iframe')).length).to.eq(0);
+        });
+        it('Should manage error', async () => {
+            await page.click('#btn-get');
+            expect(await page.$eval('#result', input => input.value)).to.eq('error');
+        });
     });
 
+    describe('POST', async () => {
+        const code = 't58794nv2';
+        it('Should retrieve sent code', async () => {
+            await page.fill('#code', code);
+            await page.click('#btn-post');
+            expect(await page.$eval('#result', input => input.value)).to.eq(code);
+        });
+        it('Should delete iframe', async () => {
+            await page.fill('#code', code);
+            await page.click('#btn-post');
+            expect((await page.$$('iframe')).length).to.eq(0);
+        });
+        it('Should manage error', async () => {
+            await page.click('#btn-post');
+            expect(await page.$eval('#result', input => input.value)).to.eq('error');
+        });
+    });
 
     after(async () => {
         const { browser, server } = await beforePromise;

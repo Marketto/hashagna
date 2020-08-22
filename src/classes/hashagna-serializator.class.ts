@@ -13,7 +13,7 @@ export default class HashagnaSerializator {
             }, {});
     }
 
-    private static deserializeValue(serializedValue?: string): ParamValueType {
+    public static deserializeValue(serializedValue?: string): ParamValueType {
         const trimmedSerializedValue = (serializedValue || '').trim();
         if (trimmedSerializedValue === '') {
             return null;
@@ -33,7 +33,7 @@ export default class HashagnaSerializator {
             .join('&');
     }
 
-    private static serializeValue(deserializedValue?: ParamValueType): string {
+    public static serializeValue(deserializedValue?: ParamValueType): string {
         if (deserializedValue === null || typeof deserializedValue === 'undefined') {
             return '';
         }

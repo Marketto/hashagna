@@ -11,7 +11,7 @@
     "lint": "tslint -c tslint.json \"src/**/*.ts\"",
     "lint-fix": "tslint -c tslint.json \"src/**/*.ts\" --fix",
     "test": "mocha",
-    "manual-test": "node ./test/manual-test.js",
+    "manual-test": "start http://localhost:3000/index.html & node ./test/manual-test.js",
     "coverage": "del ./coverage \n mkdir ./coverage \n nyc mocha && nyc report --reporter=text-lcov | relcov > ./coverage/lcov.info",
     "docs": "del ./docs & jsdoc . -c jsdoc.json"
   },

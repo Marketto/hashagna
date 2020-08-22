@@ -52,25 +52,35 @@ class HashagnaUtils {
         iframe.setAttribute('style', 'display: none');
         iframe.setAttribute('id', id);
         window.document.body.appendChild(iframe);
-        return await this.getIframe(id);
+        return await this.isDomElementReady(() => document.getElementById(id));
     }
-    static async getIframe(id) {
-        const iFrame = document.getElementById(id);
-        if (!iFrame) {
-            return await new Promise(resolve => window.requestAnimationFrame(() => this.getIframe(id).then(resolve)));
+    /*
+        private static async getIframe(id: string): Promise<HTMLIFrameElement> {
+            const iFrame = document.getElementById(id) as HTMLIFrameElement;
+            if (!iFrame) {
+                return await new Promise(resolve => window.requestAnimationFrame(() => this.getIframe(id).then(resolve)));
+            }
+            return iFrame;
         }
-        return iFrame;
-    }
-    static async iframeLoadedContentWindow(iFrame) {
-        if (!iFrame.contentWindow) {
-            return await new Promise(resolve => window.requestAnimationFrame(() => this.iframeLoadedContentWindow(iFrame).then(resolve)));
+    
+        private static async iframeLoadedContentWindow(iFrame: HTMLIFrameElement): Promise<Window> {
+            if (!iFrame.contentWindow) {
+                return await new Promise(resolve => window.requestAnimationFrame(() => this.iframeLoadedContentWindow(iFrame).then(resolve)));
+            }
+            return iFrame.contentWindow;
         }
-        return iFrame.contentWindow;
+    */
+    static async isDomElementReady(getter) {
+        const target = getter();
+        if (!target) {
+            return await new Promise(resolve => window.requestAnimationFrame(() => this.isDomElementReady(getter).then(resolve)));
+        }
+        return target;
     }
     static iframeListenerInjector(iFrame) {
         return new Promise((resolve, reject) => {
             iFrame.onload = async () => {
-                const contentWindow = await this.iframeLoadedContentWindow(iFrame);
+                const contentWindow = await this.isDomElementReady(() => iFrame.contentWindow);
                 if (!contentWindow || !contentWindow.location || !contentWindow.location.hash) {
                     return reject(new Error('No hash params found'));
                 }
@@ -94,13 +104,50 @@ class HashagnaUtils {
     static newId() {
         return Math.random().toString(36).substring(2);
     }
+    static async iFrameFormSubmit(iFrame, url, params) {
+        // Retrieving iframe document
+        const iFrameDoc = await this.isDomElementReady(() => iFrame.contentDocument);
+        const iFrameDocElement = await this.isDomElementReady(() => iFrameDoc.documentElement);
+        // Cleaning up the iFrame document
+        iFrameDocElement.innerHTML = '';
+        // Creating form
+        const consentForm = iFrameDoc.createElement('form');
+        // Form id
+        const id = this.newId();
+        Object.entries({
+            method: 'post',
+            action: url,
+            id,
+        }).forEach(([key, value]) => consentForm.setAttribute(key, value));
+        // Adding form input fields
+        Object.entries(params).forEach(([name, value]) => {
+            // Creating new input element
+            const input = iFrameDoc.createElement('input');
+            input.setAttribute('name', name);
+            input.setAttribute('value', HashagnaSerializator.serializeValue(value));
+            // Appending the input into the form
+            consentForm.appendChild(input);
+        });
+        // Appending composed form into the iFrame
+        iFrameDocElement.appendChild(consentForm);
+        // Waiting for DOM to be ready
+        await this.isDomElementReady(() => iFrameDoc.getElementById(id));
+        // Sending request by form submit
+        consentForm.submit();
+    }
 }
 
 class HashagnaHttpClient {
-    static async get(url, queryParams) {
+    static async get(url, queryParams, options) {
         const iFrame = await HashagnaUtils.newIframe();
-        const hashListener = HashagnaUtils.iframeListenerInjector(iFrame);
+        const hashListener = HashagnaUtils.iframeListenerInjector(iFrame).finally(() => iFrame.remove());
         iFrame.src = `${url}?${HashagnaSerializator.serializeParams(queryParams)}`;
+        return await hashListener;
+    }
+    static async post(url, params, options) {
+        const iFrame = await HashagnaUtils.newIframe();
+        const hashListener = HashagnaUtils.iframeListenerInjector(iFrame).finally(() => iFrame.remove());
+        await HashagnaUtils.iFrameFormSubmit(iFrame, url, params);
         return await hashListener;
     }
 }

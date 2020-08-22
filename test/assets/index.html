@@ -12,7 +12,8 @@
         <script>
             function test(method) {
                 Hashagna.HashagnaHttpClient[method]('/api/auto-redirect', { code: document.getElementById('code').value })
-                    .then(({ hashParams }) => document.getElementById('result').value = hashParams.result);
+                    .then(({ hashParams }) => document.getElementById('result').value = hashParams.result)
+                    .catch(() => document.getElementById('result').value = 'error');
             }
         </script>
     </body>

@@ -1,4 +1,5 @@
 const { express, path } = require('./common');
+const bodyParser = require('body-parser');
 
 module.exports = (serverPort, callBack) => {
     const server = express();
@@ -9,6 +10,15 @@ module.exports = (serverPort, callBack) => {
         setTimeout(() => {
             if (req.query.code) {
                 res.redirect(302, `/redirection.html#result=${req.query.code}`);
+            } else {
+                res.sendStatus(400);
+            }
+        }, 600);
+    });
+    server.post('/api/auto-redirect',  bodyParser.urlencoded({ extended: true }), (req, res) => {
+        setTimeout(() => {
+            if (req.body.code) {
+                res.redirect(302, `/redirection.html#result=${req.body.code}`);
             } else {
                 res.sendStatus(400);
             }
