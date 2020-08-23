@@ -15,7 +15,7 @@
 [![Blog](https://img.shields.io/badge/blog-marketto-blue.svg)](http://blog.marketto.it)
 [![Buy me a coffee](https://img.shields.io/badge/Ko--fi-donate-blueviolet)](https://ko-fi.com/marketto)
 
-TS utility to handle APIs which redirects (3xx) to an uri appending Hash params
+Utility to handle (GET or POST) APIs which redirects (3xx) to an uri appending Hash params via iFrame
 
 ## 🔌 INSTALLATION
 ```{r, engine='bash', global_install}

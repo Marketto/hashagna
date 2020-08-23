@@ -1,7 +1,7 @@
 {
   "name": "@marketto/hashagna",
   "version": "1.0.0",
-  "description": "Library to handle iFrame GET/POST requests to catch provided Hash in redirected Url",
+  "description": "Utility to handle (GET or POST) APIs which redirects (3xx) to an uri appending Hash params via iFrame",
   "browser": "dist/hashagna.min.js",
   "module": "dist/hashagna.mjs",
   "types": "dist/hashagna.d.ts",
