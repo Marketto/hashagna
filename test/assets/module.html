@@ -15,9 +15,9 @@
         integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
         crossorigin="anonymous"></script>
     <script crossorigin="anonymous" src="https://polyfill.io/v3/polyfill.min.js?version=3.52.1&features=Object.entries%2CPromise%2CPromise.prototype.finally%2CElement.prototype.remove"></script>
-    <script src="/dist/hashagna.min.js"></script>
+    <script type="module" src="/dist/hashagna.mjs"></script>
     <link rel="stylesheet" href="/style.css">
-    <script src="/script.js"></script>
+    <script type="module" src="/script.mjs"></script>
 </head>
 
 <body>
@@ -41,16 +41,16 @@
                     <a class="nav-link" href="/simple.html">Simple</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="/existing-iframe.html">Existing iFrame</a>
+                    <a class="nav-link" href="/existing-iframe.html">Existing iFrame</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/module.html">Module Import</a>
+                    <a class="nav-link active" href="/module.html">Module Import</a>
                 </li>
             </ul>
         </div>
     </nav>
     <div class="jumbotron">
-        <h2>Existing Frame Test</h2>
+        <h2>Simple Test</h2>
         <div class="alert alert-info" role="alert">
             <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-info-circle" fill="currentColor"
                 xmlns="http://www.w3.org/2000/svg">
@@ -59,7 +59,7 @@
                     d="M8.93 6.588l-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588z" />
                 <circle cx="8" cy="4.5" r="1" />
             </svg>
-            <span>Using default settings and an existing iFrame, not destroying it</span>
+            <span>Using default settings and automatic iFrame creation & destroy</span>
         </div>
         <form>
             <div class="form-group">
@@ -67,7 +67,7 @@
                 <div class="input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text">
-                            <svg width="1.4em" height="1.4em" viewBox="0 0 16 16" class="bi bi-key" fill="currentColor"
+                            <svg viewBox="0 0 16 16" class="bi bi-key" fill="currentColor"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd"
                                     d="M0 8a4 4 0 0 1 7.465-2H14a.5.5 0 0 1 .354.146l1.5 1.5a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0L13 9.207l-.646.647a.5.5 0 0 1-.708 0L11 9.207l-.646.647a.5.5 0 0 1-.708 0L9 9.207l-.646.647A.5.5 0 0 1 8 10h-.535A4 4 0 0 1 0 8zm4-3a3 3 0 1 0 2.712 4.285A.5.5 0 0 1 7.163 9h.63l.853-.854a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.793-.793-1-1h-6.63a.5.5 0 0 1-.451-.285A3 3 0 0 0 4 5z" />
@@ -83,7 +83,7 @@
                 <div class="input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text">
-                            <svg width="1.4em" height="1.4em" viewBox="0 0 16 16" class="bi bi-key" fill="currentColor"
+                            <svg viewBox="0 0 16 16" class="bi bi-key" fill="currentColor"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd"
                                     d="M12 1H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2zm-1.146 5.854a.5.5 0 0 0-.708-.708L7.5 8.793 6.354 7.646a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0l3-3z" />
@@ -94,15 +94,13 @@
                         disabled>
                 </div>
             </div>
-            <button type="button" class="btn btn-info" id="btn-get" onclick="test('get', 'existing-iframe')">
+            <button type="button" class="btn btn-info" id="btn-get" onclick="test('get')">
                 Send Code By GET
             </button>
-            <button type="button" class="btn btn-dark" id="btn-post" onclick="test('post', 'existing-iframe')">
+            <button type="button" class="btn btn-dark" id="btn-post" onclick="test('post')">
                 Send Code By POST
             </button>
         </form>
-        <hr/>
-        <iframe id="existing-iframe" class="form-control" src="/waiting.html" disabled></iframe>
     </div>
 </body>
 

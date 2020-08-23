@@ -55,6 +55,7 @@ export default [
             ...baseConf.output,
             format: "iife",
             file: pkg.browser,
+            outro: 'window.HashagnaHttpClient = exports.HashagnaHttpClient;' 
         },
         plugins: [
             ...baseConf.plugins,

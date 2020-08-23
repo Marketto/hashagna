@@ -156,6 +156,73 @@ Object.entries({chromium, webkit, firefox}).forEach(([browserName, pwBrowserConn
             });
         });
     
+
+        describe('Module', async () => {
+            let page;
+            beforeEach(async () => {
+                const { context } = beforePromise;
+                page = await context.newPage();
+                await page.goto(`${TARGET_URL}/module.html`);
+            });
+            afterEach(async () => {
+                await page.close();
+            });
+    
+            describe('GET', async () => {
+                const code = 'dfs768sdf';
+                it('Should retrieve sent code', async () => {
+                    await page.fill('#code', code);
+                    await page.click('#btn-get');
+                    if (browserName === 'firefox') {
+                        await new Promise(r => setTimeout(r, 500));
+                    }
+                    expect(await page.$eval('#result', input => input.value)).to.eq(cryptoMd5(code));
+                });
+                it('Should delete iframe', async () => {
+                    await page.fill('#code', code);
+                    await page.click('#btn-get');
+                    if (browserName === 'firefox') {
+                        await new Promise(r => setTimeout(r, 500));
+                    }
+                    expect((await page.$$('iframe')).length).to.eq(0);
+                });
+                it('Should manage error', async () => {
+                    await page.click('#btn-get');
+                    if (browserName === 'firefox') {
+                        await new Promise(r => setTimeout(r, 500));
+                    }
+                    expect(await page.$eval('#result', input => input.value)).to.eq('error');
+                });
+            });
+        
+            describe('POST', async () => {
+                const code = 't58794nv2';
+                it('Should retrieve sent code', async () => {
+                    await page.fill('#code', code);
+                    await page.click('#btn-post');
+                    if (browserName === 'firefox') {
+                        await new Promise(r => setTimeout(r, 500));
+                    }
+                    expect(await page.$eval('#result', input => input.value)).to.eq(cryptoMd5(code));
+                });
+                it('Should delete iframe', async () => {
+                    await page.fill('#code', code);
+                    await page.click('#btn-post');
+                    if (browserName === 'firefox') {
+                        await new Promise(r => setTimeout(r, 500));
+                    }
+                    expect((await page.$$('iframe')).length).to.eq(0);
+                });
+                it('Should manage error', async () => {
+                    await page.click('#btn-post');
+                    if (browserName === 'firefox') {
+                        await new Promise(r => setTimeout(r, 500));
+                    }
+                    expect(await page.$eval('#result', input => input.value)).to.eq('error');
+                });
+            });
+        });
+
         after(async () => {
             const { browser, server } = await beforePromise;
             await server.close();

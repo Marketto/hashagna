@@ -6,7 +6,7 @@ const DELAY = 300;
 module.exports = (serverPort, callBack) => {
     const server = express();
     server.use('/', express.static(assetsPath));
-    server.use('/lib', express.static(path.join(__dirname, '../../dist')));
+    server.use('/dist', express.static(path.join(__dirname, '../../dist')));
     server.get('/api/redirection', (req, res) => res.sendStatus(200));
     server.get('/api/auto-redirect', (req, res) => {
         res.set('Cache-Control', 'no-store');
