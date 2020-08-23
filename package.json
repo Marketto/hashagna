@@ -6,7 +6,7 @@
   "module": "dist/hashagna.mjs",
   "types": "dist/hashagna.d.ts",
   "scripts": {
-    "release": "npm audit fix & npm run lint-fix && npm run test && npm run coverage && npm run docs && npm run build",
+    "release": "npm audit fix & npm run lint-fix && npm run docs && npm run build",
     "build": "npx del-cli ./dist/* & rollup -c",
     "lint": "tslint -c tslint.json \"src/**/*.ts\"",
     "lint-fix": "tslint -c tslint.json \"src/**/*.ts\" --fix",
