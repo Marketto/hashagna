@@ -1,25 +1,24 @@
 import { ParamsType, LocationInfo } from "../types/params.type";
-import HashagnaUtils from './hashagna-utils.class';
-import HashagnaSerializator from "./hashagna-serializator.class";
-import { HashagnaOptions } from "../interfaces/options.interface";
+import HashagnaUtils from './utils.class';
+import HashagnaSerializator from "./serializator.class";
+import HashagnaOptions from "../interfaces/options.interface";
 
 export default class HashagnaHttpClient {
 
-    private static async initIFrame(options: HashagnaOptions = {}) {
-        let iFrame: HTMLIFrameElement;
-
-        if (options.iFrame instanceof HTMLIFrameElement) {
-            iFrame = options.iFrame;
-        } else if (options.iFrameId) {
-            iFrame = await HashagnaUtils.isDomElementReady(() => document.getElementById(options.iFrameId as string) as HTMLIFrameElement)
-        } else {
-            iFrame = await HashagnaUtils.newIframe();
+    private static async getIFrame(iFrameId?: string): Promise<HTMLIFrameElement> {
+        if (iFrameId) {
+            return (await HashagnaUtils.isDomElementReady(() => document.getElementById(iFrameId))) as HTMLIFrameElement;
         }
+        return await HashagnaUtils.newIframe();
+    }
+
+    private static async initIFrame(options?: HashagnaOptions) {
+        const iFrame: HTMLIFrameElement = (options && options.iFrame) || await this.getIFrame(options ? options.iFrameId : undefined);
 
         let finalCallback: () => void;
-        if (!(options.iFrame || options.iFrameId)) {
+        if (!(options && (options.iFrame || options.iFrameId))) {
             finalCallback = () => iFrame.remove();
-        } else if (options.autoClean) {
+        } else if (options && options.autoClean) {
             finalCallback = () => HashagnaUtils.isDomElementReady(() => iFrame.contentWindow &&
                 iFrame.contentWindow.document.getElementsByTagName('body')[0] as HTMLBodyElement)
                     .then(iFrameBody => iFrameBody.innerHTML = '');

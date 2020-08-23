@@ -1,5 +1,5 @@
 import { LocationInfo, ParamsType } from '../types/params.type';
-import HashagnaSerializator from './hashagna-serializator.class';
+import HashagnaSerializator from './serializator.class';
 
 export default class HashagnaUtils {
     public static async newIframe(): Promise<HTMLIFrameElement> {
@@ -8,7 +8,7 @@ export default class HashagnaUtils {
         iframe.setAttribute('style', 'display: none');
         iframe.setAttribute('id', id);
         window.document.body.appendChild(iframe);
-        return await this.isDomElementReady(() => document.getElementById(id) as HTMLIFrameElement)
+        return await this.isDomElementReady(() => document.getElementById(id) as HTMLIFrameElement | null)
     }
 
     public static async isDomElementReady<T extends HTMLElement | Window | Document>(getter: () => T | null): Promise<T> {

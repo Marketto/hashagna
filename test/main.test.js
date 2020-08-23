@@ -35,15 +35,24 @@ Object.entries({chromium, webkit, firefox}).forEach(([browserName, pwBrowserConn
                 it('Should retrieve sent code', async () => {
                     await page.fill('#code', code);
                     await page.click('#btn-get');
+                    if (browserName === 'firefox') {
+                        await new Promise(r => setTimeout(r, 500));
+                    }
                     expect(await page.$eval('#result', input => input.value)).to.eq(cryptoMd5(code));
                 });
                 it('Should delete iframe', async () => {
                     await page.fill('#code', code);
                     await page.click('#btn-get');
+                    if (browserName === 'firefox') {
+                        await new Promise(r => setTimeout(r, 500));
+                    }
                     expect((await page.$$('iframe')).length).to.eq(0);
                 });
                 it('Should manage error', async () => {
                     await page.click('#btn-get');
+                    if (browserName === 'firefox') {
+                        await new Promise(r => setTimeout(r, 500));
+                    }
                     expect(await page.$eval('#result', input => input.value)).to.eq('error');
                 });
             });
@@ -53,15 +62,24 @@ Object.entries({chromium, webkit, firefox}).forEach(([browserName, pwBrowserConn
                 it('Should retrieve sent code', async () => {
                     await page.fill('#code', code);
                     await page.click('#btn-post');
+                    if (browserName === 'firefox') {
+                        await new Promise(r => setTimeout(r, 500));
+                    }
                     expect(await page.$eval('#result', input => input.value)).to.eq(cryptoMd5(code));
                 });
                 it('Should delete iframe', async () => {
                     await page.fill('#code', code);
                     await page.click('#btn-post');
+                    if (browserName === 'firefox') {
+                        await new Promise(r => setTimeout(r, 500));
+                    }
                     expect((await page.$$('iframe')).length).to.eq(0);
                 });
                 it('Should manage error', async () => {
                     await page.click('#btn-post');
+                    if (browserName === 'firefox') {
+                        await new Promise(r => setTimeout(r, 500));
+                    }
                     expect(await page.$eval('#result', input => input.value)).to.eq('error');
                 });
             });
@@ -83,17 +101,27 @@ Object.entries({chromium, webkit, firefox}).forEach(([browserName, pwBrowserConn
                 it('Should retrieve sent code', async () => {
                     await page.fill('#code', code);
                     await page.click('#btn-get');
+                    if (browserName === 'firefox') {
+                        await new Promise(r => setTimeout(r, 500));
+                    }
                     expect(await page.$eval('#result', input => input.value)).to.eq(cryptoMd5(code));
                 });
                 it('Should not delete the existing iframe', async () => {
                     await page.fill('#code', code);
                     await page.click('#btn-get');
+                    if (browserName === 'firefox') {
+                        await new Promise(r => setTimeout(r, 500));
+                    }
+                    await page.$('#result');
                     expect((await page.$$('iframe')).length).to.eq(1);
                     expect(await page.$eval('iframe', iframe => iframe.id)).to.eq('existing-iframe');
                     expect(await page.$eval('iframe', iframe => iframe.contentWindow.document.getElementsByClassName('text-success').length)).to.eq(1);
                 });
                 it('Should manage error', async () => {
                     await page.click('#btn-get');
+                    if (browserName === 'firefox') {
+                        await new Promise(r => setTimeout(r, 500));
+                    }
                     expect(await page.$eval('#result', input => input.value)).to.eq('error');
                 });
             });
@@ -103,17 +131,26 @@ Object.entries({chromium, webkit, firefox}).forEach(([browserName, pwBrowserConn
                 it('Should retrieve sent code', async () => {
                     await page.fill('#code', code);
                     await page.click('#btn-post');
+                    if (browserName === 'firefox') {
+                        await new Promise(r => setTimeout(r, 500));
+                    }
                     expect(await page.$eval('#result', input => input.value)).to.eq(cryptoMd5(code));
                 });
                 it('Should not delete the existing iframe', async () => {
                     await page.fill('#code', code);
                     await page.click('#btn-post');
+                    if (browserName === 'firefox') {
+                        await new Promise(r => setTimeout(r, 500));
+                    }
                     expect((await page.$$('iframe')).length).to.eq(1);
                     expect(await page.$eval('iframe', iframe => iframe.id)).to.eq('existing-iframe');
                     expect(await page.$eval('iframe', iframe => iframe.contentWindow.document.getElementsByClassName('text-success').length)).to.eq(1);
                 });
                 it('Should manage error', async () => {
                     await page.click('#btn-post');
+                    if (browserName === 'firefox') {
+                        await new Promise(r => setTimeout(r, 500));
+                    }
                     expect(await page.$eval('#result', input => input.value)).to.eq('error');
                 });
             });

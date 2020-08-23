@@ -37,6 +37,9 @@ export default class HashagnaSerializator {
         if (deserializedValue === null || typeof deserializedValue === 'undefined') {
             return '';
         }
+        if (deserializedValue instanceof Date) {
+            return deserializedValue.toJSON();
+        }
         if (['boolean', 'number', 'string'].includes(typeof deserializedValue)) {
             return (deserializedValue).toString();
         }
