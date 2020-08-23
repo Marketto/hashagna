@@ -1,10 +1,11 @@
 import {HashagnaHttpClient} from '/dist/hashagna.mjs';
 window.test = (method, iFrameId) => {
-    HashagnaHttpClient[method]('/api/auto-redirect', { code: document.getElementById('code').value }, { iFrameId: iFrameId })
-        .then(function(response) {
-            document.getElementById('result').value = response.hashParams.result;
+    const code = document.getElementById('code').value;
+    HashagnaHttpClient[method]('/api/auto-redirect', { code }, { iFrameId })
+        .then(({ hashParams }) => {
+            document.getElementById('result').value = hashParams.result;
         })
-        .catch(function() {
+        .catch(() => {
             document.getElementById('result').value = 'error';
         });
 }
