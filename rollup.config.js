@@ -4,11 +4,12 @@ import tsconfig from "./tsconfig.json";
 import license from "rollup-plugin-license";
 import path from "path";
 
+const SRC_PATH = 'src';
 const baseConf = {
     external: [
         ...Object.keys(pkg.dependencies || {}),
     ],
-    input: "src/index.ts",
+    input: path.join(SRC_PATH, "index.ts"),
     output: {
         exports: "named",
         globals: {
@@ -25,48 +26,45 @@ const baseConf = {
             },
             cwd: __dirname,
         }),
+        
     ],
 };
-
-const rollupModuleConf = rollupPluginTs({
-    tsconfig: {
-        ...tsconfig.compilerOptions,
-        module: "ESNext",
-        target: "ESNext",
-    },
-});
-
-const rollupBrowserConf = rollupPluginTs({
-    tsconfig: {
-        ...tsconfig.compilerOptions,
-        module: "es2015",
-        target: "ES2015",
-    },
-});
 
 export default [
     {
         ...baseConf,
         output: {
             ...baseConf.output,
-            file: pkg.module,
             format: "esm",
+            file: pkg.module,
         },
         plugins: [
-            rollupModuleConf,
             ...baseConf.plugins,
+            rollupPluginTs({
+                tsconfig: {
+                    ...tsconfig.compilerOptions,
+                    module: "ESNext",
+                    target: "ESNext",
+                },
+            }),
         ],
     },
     {
         ...baseConf,
         output: {
             ...baseConf.output,
-            file: pkg.main, //bundle.min
             format: "iife",
+            file: pkg.browser,
         },
         plugins: [
-            rollupBrowserConf,
             ...baseConf.plugins,
+            rollupPluginTs({
+                tsconfig: {
+                    ...tsconfig.compilerOptions,
+                    module: "none",
+                    target: "es3",
+                },
+            }),
         ],
     },
 ];

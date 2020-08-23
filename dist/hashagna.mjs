@@ -38,6 +38,9 @@ class HashagnaSerializator {
         if (deserializedValue === null || typeof deserializedValue === 'undefined') {
             return '';
         }
+        if (deserializedValue instanceof Date) {
+            return deserializedValue.toJSON();
+        }
         if (['boolean', 'number', 'string'].includes(typeof deserializedValue)) {
             return (deserializedValue).toString();
         }
@@ -122,28 +125,38 @@ class HashagnaUtils {
 }
 
 class HashagnaHttpClient {
-    static async initIFrame(options = {}) {
-        let iFrame;
-        if (options.iFrame instanceof HTMLIFrameElement) {
-            iFrame = options.iFrame;
+    static async getIFrame(iFrameId) {
+        if (iFrameId) {
+            return (await HashagnaUtils.isDomElementReady(() => document.getElementById(iFrameId)));
         }
-        else if (options.iFrameId) {
-            iFrame = await HashagnaUtils.isDomElementReady(() => document.getElementById(options.iFrameId));
-        }
-        else {
-            iFrame = await HashagnaUtils.newIframe();
+        return await HashagnaUtils.newIframe();
+    }
+    static async initIFrame(options) {
+        const iFrame = (options && options.iFrame) || await this.getIFrame(options ? options.iFrameId : undefined);
+        const restoreDisabled = iFrame.hasAttribute('disabled');
+        if (restoreDisabled) {
+            iFrame.removeAttribute('disabled');
         }
         let finalCallback;
-        if (!(options.iFrame || options.iFrameId)) {
+        if (!(options && (options.iFrame || options.iFrameId))) {
             finalCallback = () => iFrame.remove();
         }
-        else if (options.autoClean) {
-            finalCallback = () => HashagnaUtils.isDomElementReady(() => iFrame.contentWindow &&
-                iFrame.contentWindow.document.getElementsByTagName('body')[0])
-                .then(iFrameBody => iFrameBody.innerHTML = '');
+        else if (options && options.autoClean) {
+            finalCallback = () => {
+                if (restoreDisabled) {
+                    iFrame.setAttribute('disabled', '');
+                }
+                HashagnaUtils.isDomElementReady(() => iFrame.contentWindow &&
+                    iFrame.contentWindow.document.getElementsByTagName('body')[0])
+                    .then(iFrameBody => iFrameBody.innerHTML = '');
+            };
         }
         else {
-            finalCallback = () => undefined;
+            finalCallback = () => {
+                if (restoreDisabled) {
+                    iFrame.setAttribute('disabled', '');
+                }
+            };
         }
         const listener = HashagnaUtils.iframeListenerInjector(iFrame).finally(finalCallback);
         return {

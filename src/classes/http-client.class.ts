@@ -15,15 +15,30 @@ export default class HashagnaHttpClient {
     private static async initIFrame(options?: HashagnaOptions) {
         const iFrame: HTMLIFrameElement = (options && options.iFrame) || await this.getIFrame(options ? options.iFrameId : undefined);
 
+        const restoreDisabled = iFrame.hasAttribute('disabled');
+
+        if (restoreDisabled) {
+            iFrame.removeAttribute('disabled');
+        }
+
         let finalCallback: () => void;
         if (!(options && (options.iFrame || options.iFrameId))) {
             finalCallback = () => iFrame.remove();
         } else if (options && options.autoClean) {
-            finalCallback = () => HashagnaUtils.isDomElementReady(() => iFrame.contentWindow &&
+            finalCallback = () => {
+                if (restoreDisabled) {
+                    iFrame.setAttribute('disabled', '');
+                }
+                HashagnaUtils.isDomElementReady(() => iFrame.contentWindow &&
                 iFrame.contentWindow.document.getElementsByTagName('body')[0] as HTMLBodyElement)
                     .then(iFrameBody => iFrameBody.innerHTML = '');
+            }
         } else {
-            finalCallback = () => undefined;
+            finalCallback = () => {
+                if (restoreDisabled) {
+                    iFrame.setAttribute('disabled', '');
+                }
+            };
         }
 
         const listener = HashagnaUtils.iframeListenerInjector(iFrame).finally(finalCallback);

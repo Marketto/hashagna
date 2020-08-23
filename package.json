@@ -2,12 +2,12 @@
   "name": "@marketto/hashagna",
   "version": "1.0.0",
   "description": "Library to handle iFrame GET/POST requests to catch provided Hash in redirected Url",
-  "main": "dist/hashagna.min.js",
+  "browser": "dist/hashagna.min.js",
   "module": "dist/hashagna.mjs",
-  "typings": "src/index.ts",
+  "types": "dist/hashagna.d.ts",
   "scripts": {
     "release": "npm audit fix & npm run lint-fix && npm run test && npm run coverage && npm run docs && npm run build",
-    "build": "del ./dist & rollup -c",
+    "build": "npx del-cli ./dist/* & rollup -c",
     "lint": "tslint -c tslint.json \"src/**/*.ts\"",
     "lint-fix": "tslint -c tslint.json \"src/**/*.ts\" --fix",
     "test": "mocha",
@@ -26,6 +26,7 @@
   "author": "Marco Ricupero <marco.ricupero@gmail.com>",
   "license": "MIT",
   "devDependencies": {
+    "@rollup/plugin-babel": "^5.2.0",
     "@wessberg/rollup-plugin-ts": "^1.3.2",
     "chai": "^4.2.0",
     "crypto": "^1.0.1",
@@ -37,8 +38,7 @@
     "nyc": "^15.1.0",
     "playwright": "^1.3.0",
     "relcov": "^1.0.6",
-    "rollup": "^2.26.4",
-    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup": "^2.26.5",
     "rollup-plugin-license": "^2.2.0",
     "tslint": "^6.1.3",
     "typescript": "^4.0.2"

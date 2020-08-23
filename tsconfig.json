@@ -1,14 +1,13 @@
 {
   "compilerOptions": {
-    "target": "ES2015",
+    "target": "ESNext",
     "module": "commonjs",
-    "declaration": false,
+    "declaration": true,
     "downlevelIteration": true,
     "strict": true,
     "noImplicitAny": true,
-    "moduleResolution": "node",
+    "moduleResolution": "Node",
     "esModuleInterop": true,
-    "resolveJsonModule": true,
     "inlineSourceMap": true
   },
   "typeRoots": [

@@ -9,6 +9,7 @@ module.exports = (serverPort, callBack) => {
     server.use('/lib', express.static(path.join(__dirname, '../../dist')));
     server.get('/api/redirection', (req, res) => res.sendStatus(200));
     server.get('/api/auto-redirect', (req, res) => {
+        res.set('Cache-Control', 'no-store');
         setTimeout(() => {
             if (req.query.code) {
                 res.redirect(302, `/redirection.html#result=${cryptoMd5(req.query.code)}`);
@@ -18,6 +19,7 @@ module.exports = (serverPort, callBack) => {
         }, DELAY);
     });
     server.post('/api/auto-redirect',  bodyParser.urlencoded({ extended: true }), (req, res) => {
+        res.set('Cache-Control', 'no-store');
         setTimeout(() => {
             if (req.body.code) {
                 res.redirect(302, `/redirection.html#result=${cryptoMd5(req.body.code)}`);
