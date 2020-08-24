@@ -1,4 +1,4 @@
-import {HashagnaHttpClient} from '/dist/hashagna.mjs';
+import { HashagnaHttpClient } from '/dist/hashagna.mjs';
 window.test = (method, iFrameId) => {
     const code = document.getElementById('code').value;
     HashagnaHttpClient[method]('/api/auto-redirect', { code }, { iFrameId })

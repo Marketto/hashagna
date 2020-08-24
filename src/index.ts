@@ -3,6 +3,7 @@ import HashagnaUtils from './classes/utils.class';
 import HashagnaParams from './interfaces/options.interface';
 import HashagnaHttpClient from './classes/http-client.class';
 
+export default HashagnaHttpClient;
 export {
     HashagnaHttpClient,
     HashagnaUtils,

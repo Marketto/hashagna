@@ -12,7 +12,7 @@ export default class HashagnaHttpClient {
         return await HashagnaUtils.newIframe();
     }
 
-    private static async initIFrame(options?: HashagnaOptions) {
+    private static async initIFrame(options?: HashagnaOptions): Promise<{ iFrame: HTMLIFrameElement, listener: Promise<LocationInfo>}> {
         const iFrame: HTMLIFrameElement = (options && options.iFrame) || await this.getIFrame(options ? options.iFrameId : undefined);
 
         const restoreDisabled = iFrame.hasAttribute('disabled');
@@ -30,7 +30,7 @@ export default class HashagnaHttpClient {
                     iFrame.setAttribute('disabled', '');
                 }
                 HashagnaUtils.isDomElementReady(() => iFrame.contentWindow &&
-                iFrame.contentWindow.document.getElementsByTagName('body')[0] as HTMLBodyElement)
+                    iFrame.contentWindow.document.getElementsByTagName('body')[0])
                     .then(iFrameBody => iFrameBody.innerHTML = '');
             }
         } else {
@@ -41,7 +41,17 @@ export default class HashagnaHttpClient {
             };
         }
 
-        const listener = HashagnaUtils.iframeListenerInjector(iFrame).finally(finalCallback);
+        const listener = new Promise<LocationInfo>((resolve, reject) => {
+            HashagnaUtils.iframeListenerInjector(iFrame)
+                .then(locationInfo => {
+                    resolve(locationInfo);
+                    finalCallback();
+                })
+                .catch(err => {
+                    reject(err);
+                    finalCallback();
+                });
+        });
 
         return {
             iFrame,

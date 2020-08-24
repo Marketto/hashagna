@@ -1,4 +1,5 @@
 import rollupPluginTs from "@wessberg/rollup-plugin-ts";
+import { uglify } from "rollup-plugin-uglify";
 import pkg from "./package.json";
 import tsconfig from "./tsconfig.json";
 import license from "rollup-plugin-license";
@@ -14,7 +15,7 @@ const baseConf = {
         exports: "named",
         globals: {
         },
-        name: "Hashagna",
+        name: "hashagna",
         sourcemap: true,
     },
     plugins: [
@@ -26,7 +27,6 @@ const baseConf = {
             },
             cwd: __dirname,
         }),
-        
     ],
 };
 
@@ -45,6 +45,7 @@ export default [
                     ...tsconfig.compilerOptions,
                     module: "ESNext",
                     target: "ESNext",
+                    declaration: true,
                 },
             }),
         ],
@@ -53,8 +54,28 @@ export default [
         ...baseConf,
         output: {
             ...baseConf.output,
-            format: "iife",
+            format: "amd",
             file: pkg.browser,
+        },
+        plugins: [
+            ...baseConf.plugins,
+            rollupPluginTs({
+                tsconfig: {
+                    ...tsconfig.compilerOptions,
+                    module: "amd",
+                    target: "es5",
+                    declaration: false,
+                },
+            }),
+            uglify()
+        ],
+    },
+    {
+        ...baseConf,
+        output: {
+            ...baseConf.output,
+            format: "iife",
+            file: 'dist/hashagna.iife.min.js',
             outro: 'window.HashagnaHttpClient = exports.HashagnaHttpClient;' 
         },
         plugins: [
@@ -64,8 +85,10 @@ export default [
                     ...tsconfig.compilerOptions,
                     module: "none",
                     target: "es3",
+                    declaration: false,
                 },
             }),
+            uglify()
         ],
     },
 ];

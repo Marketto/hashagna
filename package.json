@@ -1,6 +1,6 @@
 {
   "name": "@marketto/hashagna",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Utility to handle (GET or POST) APIs which redirects (3xx) to an uri appending Hash params via iFrame",
   "browser": "dist/hashagna.min.js",
   "module": "dist/hashagna.mjs",
@@ -46,6 +46,7 @@
     "relcov": "^1.0.6",
     "rollup": "^2.26.5",
     "rollup-plugin-license": "^2.2.0",
+    "rollup-plugin-uglify": "^6.0.4",
     "ts-node": "^9.0.0",
     "tslint": "^6.1.3",
     "typescript": "^4.0.2"

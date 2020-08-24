@@ -3,7 +3,6 @@
 
 [![NPM Version](https://img.shields.io/npm/v/@marketto/hashagna.svg)](https://www.npmjs.com/package/@marketto/hashagna)
 [![NPM Downloads](https://img.shields.io/npm/dm/@marketto/hashagna.svg)](https://www.npmjs.com/package/@marketto/hashagna)
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FMarketto%2Fhashagna.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FMarketto%2Fhashagna?ref=badge_shield)
 [![Dependency status](https://david-dm.org/Marketto/hashagna.svg)](https://david-dm.org/Marketto/hashagna)
 [![Dev dependency status](https://david-dm.org/Marketto/hashagna/dev-status.svg)](https://david-dm.org/Marketto/hashagna?type=dev)
 [![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=Marketto_hashagna&metric=alert_status)](https://sonarcloud.io/dashboard/index/Marketto_hashagna)
@@ -23,18 +22,22 @@ npm i -s @marketto/hashagna
 ```
 
 ## 🔧 USAGE
-### ES6
+### MJS / ES6 / Typescript
 ```javascript
 import { HashagnaHttpClient } from '@marketto/hashagna';
 ```
-### TypeScript
-```typescript
-import { HashagnaHttpClient } from '@marketto/hashagna';
+
+### AMD
+```javascript
+require(['/dist/hashagna.min.js'], ({ HashagnaHttpClient }) => {
+    // your code
+});
 ```
+
 ### Script
 ```html
 <!-- Polyfills needed only to support IE11 -->
-<script crossorigin="anonymous" src="https://polyfill.io/v3/polyfill.min.js?version=3.52.1&features=Object.entries%2CPromise%2CPromise.prototype.finally%2CElement.prototype.remove"></script>
+<script crossorigin="anonymous" src="https://polyfill.io/v3/polyfill.min.js?version=3.52.1&features=Object.entries%2CPromise%2CElement.prototype.remove"></script>
 <script src="https://unpkg.com/@marketto/hashagna@latest/dist/hashagna.min.js"></script>
 ```
 
@@ -48,25 +51,26 @@ npm run manual-test
 
 ### HashagnaHttpClient
 *Class* with *static* methods
-Both get and post methods accepts 2 mandatory params and an optional 3rd one:
-* url - relative or absolute path of the api
-* params - (Object) Key/Value of params to be sent
-* options (optional)
-    * iFrame - DOM Element to use
-    * iFrameId - id of the iFrame to use
-    * autoClean - (only with iFrame or iFrameId) if true the iframe will be wiped up after receiving data
-Both get and post methods are async and returns and object containing the following:
-* hash: string
-* hashParams: Object
-* host: string
-* hostname: string
-* href: string
-* origin: string
-* pathname: string
-* protocol: string
-* search: string
-* port: string
-* query: Object
+- Both get and post methods accepts 2 mandatory params and an optional 3rd one:
+    * url - relative or absolute path of the api
+    * params - (Object) Key/Value of params to be sent
+    * options (optional)
+        * iFrame - DOM Element to use
+        * iFrameId - id of the iFrame to use
+        * autoClean - (only with iFrame or iFrameId) if true the iframe will be wiped up after receiving data
+
+- Both get and post methods are async and returns and object containing the following:
+    * hash: string
+    * hashParams: Object
+    * host: string
+    * hostname: string
+    * href: string
+    * origin: string
+    * pathname: string
+    * protocol: string
+    * search: string
+    * port: string
+    * query: Object
 
 #### GET
 ```javascript

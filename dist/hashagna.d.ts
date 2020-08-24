@@ -34,4 +34,4 @@ declare class HashagnaHttpClient {
     static get(url: string, queryParams: ParamsType, options?: HashagnaOptions): Promise<LocationInfo>;
     static post(url: string, params: ParamsType, options?: HashagnaOptions): Promise<LocationInfo>;
 }
-export { HashagnaHttpClient, HashagnaUtils, LocationInfo, ParamsType, ParamValueType, HashagnaParams };
+export { HashagnaHttpClient as default, HashagnaHttpClient, HashagnaUtils, LocationInfo, ParamsType, ParamValueType, HashagnaParams };

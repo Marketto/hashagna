@@ -1,5 +1,5 @@
 /**
- * @marketto/hashagna 1.0.0
+ * @marketto/hashagna 1.1.0
  * Copyright (c) 2020, Marco Ricupero <marco.ricupero@gmail.com>
  * License: MIT
  */
@@ -158,7 +158,17 @@ class HashagnaHttpClient {
                 }
             };
         }
-        const listener = HashagnaUtils.iframeListenerInjector(iFrame).finally(finalCallback);
+        const listener = new Promise((resolve, reject) => {
+            HashagnaUtils.iframeListenerInjector(iFrame)
+                .then(locationInfo => {
+                resolve(locationInfo);
+                finalCallback();
+            })
+                .catch(err => {
+                reject(err);
+                finalCallback();
+            });
+        });
         return {
             iFrame,
             listener
@@ -176,5 +186,6 @@ class HashagnaHttpClient {
     }
 }
 
+export default HashagnaHttpClient;
 export { HashagnaHttpClient, HashagnaUtils };
 //# sourceMappingURL=hashagna.mjs.map
